@@ -16,13 +16,18 @@ public class GemGridManager : MonoBehaviour {
     private int numberOfColumns;
     [SerializeField]
     private int newGemMoveSpeed;
+    [SerializeField]
+    private int explodingCheckRate;
     private GemGrid grid;
     private List<GameObject> gems;
+    private IEnumerator explodeGridPointsCoroutine;
+
+    public bool GridReady { get; private set; }
     void Awake() {
         gems = new List<GameObject> { RedGem, GreenGem, YellowGem, PurpleGem, BlueGem };
         grid = new GemGrid(numberOfRows, numberOfColumns);
 
-        GenerateGrid();
+        RegenerateGrid();
     }
 
     private void PopulateGridWithRandomGems(Vector3 startingPosition, int numberOfRows, int numberOfColumns) {
@@ -53,20 +58,23 @@ public class GemGridManager : MonoBehaviour {
                 Destroy(point.Content);
     }
 
-    public void GenerateGrid()
+    public void RegenerateGrid()
     {
         DestroyGridContent();
         grid = new GemGrid(numberOfRows, numberOfColumns);
+        explodeGridPointsCoroutine = ExplodeAdjacentNeighbors(explodingCheckRate);
         PopulateGridWithRandomGems(startingPosition, numberOfRows, numberOfColumns);
+        StartCoroutine(explodeGridPointsCoroutine);
     }
- 
-    public void ExplodeAdjacentNeighbors()
+
+    public IEnumerator ExplodeAdjacentNeighbors(float waitTime)
     {
+        yield return new WaitForSeconds(waitTime);
+
         Stopwatch stopWatch = new Stopwatch();
         stopWatch.Start();
 
         var gridPointsToExplode = new List<GridPoint>();
-        // Get the elapsed time as a TimeSpan value.
 
         foreach (var point in grid.GridPoints)
         {
@@ -88,7 +96,16 @@ public class GemGridManager : MonoBehaviour {
                 grid.UpdateGridPoint(gridPoint.Position);
             }
         }
-        PopulateEmptyGridSpots();
+        if(gridPointsToExplode.Count > 0)
+        {
+            GridReady = false;
+            PopulateEmptyGridSpots();
+        } else
+        {
+            GridReady = true;
+            UnityEngine.Debug.Log("Grid ready");
+            StopCoroutine(explodeGridPointsCoroutine);
+        }
         stopWatch.Stop();
 
         TimeSpan ts = stopWatch.Elapsed;
@@ -119,11 +136,12 @@ public class GemGridManager : MonoBehaviour {
                         grid.UpdateGridPoint(gridPoint.Position, gem);
                         gem.GetComponent<MoveScript>().MoveToPosition(gridPoint.Position, newGemMoveSpeed);
                         gem.name = $"{randomGem.name}";
-                        //ExplodeAdjacentNeighbors();
                     }
                 }
             }
         }
+        UnityEngine.Debug.Log("Exited looping");
+
     }
 
 
