@@ -18,11 +18,23 @@ public class GemGrid {
         }
     }
 
-    public void UpdateGridPoint(Vector2 point, GameObject newContent) {
+    public void UpdateGridPoint(Vector2 point, GameObject newContent = null) {
         var existingPoint = GridPoints.Where(x => x.Position == point).FirstOrDefault();
         if (existingPoint != null)
         {
             existingPoint.Content = newContent;
+        }
+        else
+        {
+            Debug.LogWarning($"Could not find point on grid: {point.x}:{point.y}");
+        }
+    }
+    public void UpdateGridPoint(Vector2 point, GridPoint newGridPoint)
+    {
+        var existingGridPoint = GridPoints.Where(x => x.Position == point).FirstOrDefault();
+        if (existingGridPoint != null)
+        {
+            existingGridPoint = newGridPoint;
         }
         else
         {
@@ -55,19 +67,13 @@ public class GemGrid {
         return neighbour;
     }
 
-    public List<GridPoint> GetAllAdjacent(GridPoint point)
+    public List<GridPoint> GetVerticalNeighbours(GridPoint point)
     {
         var neighbours = new List<GridPoint>();
         for (int y = Convert.ToInt32(point.Position.y); y < ColumnCount; y++) // Get all neighbours up
         {
             var neighbour = GridPoints.Where(z => z.Position == new Vector2(point.Position.x, Convert.ToSingle(y))).FirstOrDefault();
             if (neighbour != null)
-                neighbours.Add(neighbour);
-        }
-        for (int x = Convert.ToInt32(point.Position.x); x < RowCount; x++) // Get all neighbours to the right
-        {
-            var neighbour = GridPoints.Where(z => z.Position == new Vector2(Convert.ToSingle(x), point.Position.y)).FirstOrDefault();
-            if(neighbour != null)
                 neighbours.Add(neighbour);
         }
 
@@ -78,15 +84,14 @@ public class GemGrid {
                 neighbours.Add(neighbour);
         }
 
-        for (int x = Convert.ToInt32(point.Position.x); x >= 0; x--) // Get all neighbours to the left
-        {
-            var neighbour = GridPoints.Where(z => z.Position == new Vector2(Convert.ToSingle(x), point.Position.y)).FirstOrDefault();
-            if (neighbour != null)
-                neighbours.Add(neighbour);
-        }
+
         return neighbours;
     }
 
+    public bool HasEmptyContent()
+    {
+        return GridPoints.Where(x => x.Content == null).Count() > 0;
+    }
     public override string ToString()
     {
         var result = "";
@@ -96,5 +101,4 @@ public class GemGrid {
         }
         return result;
     }
-
 }

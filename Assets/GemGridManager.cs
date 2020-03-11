@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ public class GemGridManager : MonoBehaviour {
     private int numberOfRows;
     [SerializeField]
     private int numberOfColumns;
+    [SerializeField]
+    private int newGemMoveSpeed;
     private GemGrid grid;
     private List<GameObject> gems;
     void Awake() {
@@ -23,6 +26,8 @@ public class GemGridManager : MonoBehaviour {
     }
 
     private void PopulateGridWithRandomGems(Vector3 startingPosition, int numberOfRows, int numberOfColumns) {
+        Stopwatch stopWatch = new Stopwatch();
+        stopWatch.Start();
         var rand = new System.Random();
         foreach (var point in grid.GridPoints) {
             var randomGem = gems[rand.Next(0, gems.Count)];
@@ -36,7 +41,16 @@ public class GemGridManager : MonoBehaviour {
         // TODO: REFACTOR: Average guess that this finds a good enough distance for the camera to see everything
         var centerGemPosition = new Vector3(numberOfRows / 2, numberOfColumns / 2, -(numberOfRows / 2 + numberOfColumns / 2) - 1);
         Camera.main.GetComponent<MoveScript>().MoveToPosition(centerGemPosition);
-        Debug.Log(grid.ToString());
+        stopWatch.Stop();
+
+        TimeSpan ts = stopWatch.Elapsed;
+        UnityEngine.Debug.Log($"Time taken to generate grid: {ts.ToString()}\n {grid.ToString()}");
+    }
+    private void DestroyGridContent()
+    {
+        foreach (var point in grid.GridPoints)
+            if (point.Content != null)
+                Destroy(point.Content);
     }
 
     public void GenerateGrid()
@@ -45,45 +59,77 @@ public class GemGridManager : MonoBehaviour {
         grid = new GemGrid(numberOfRows, numberOfColumns);
         PopulateGridWithRandomGems(startingPosition, numberOfRows, numberOfColumns);
     }
-    public void DestroyGridContent()
-    {
-        foreach (var point in grid.GridPoints)
-            if (point.Content != null)
-                Destroy(point.Content);
-    }
+ 
     public void ExplodeAdjacentNeighbors()
     {
-        var gemsToExplode = new List<GridPoint>();
+        Stopwatch stopWatch = new Stopwatch();
+        stopWatch.Start();
+
+        var gridPointsToExplode = new List<GridPoint>();
+        // Get the elapsed time as a TimeSpan value.
+
         foreach (var point in grid.GridPoints)
         {
-    
-                var topNeighbours = GetValidExplodingNeighbours(point, grid.GetTopNeighbour);
-                var bottomNeighbours = GetValidExplodingNeighbours(point, grid.GetBottomNeighour);
-                var leftNeighbours = GetValidExplodingNeighbours(point, grid.GetLeftNeighbour);
-                var rightNeighbours = GetValidExplodingNeighbours(point, grid.GetRightNeighbour);
-                gemsToExplode.AddRange(topNeighbours);
-                gemsToExplode.AddRange(bottomNeighbours);
-                gemsToExplode.AddRange(leftNeighbours);
-                gemsToExplode.AddRange(rightNeighbours);
-
+            var topNeighbours = GetValidExplodingNeighbours(point, grid.GetTopNeighbour);
+            var bottomNeighbours = GetValidExplodingNeighbours(point, grid.GetBottomNeighour);
+            var leftNeighbours = GetValidExplodingNeighbours(point, grid.GetLeftNeighbour);
+            var rightNeighbours = GetValidExplodingNeighbours(point, grid.GetRightNeighbour);
+            gridPointsToExplode.AddRange(topNeighbours);
+            gridPointsToExplode.AddRange(bottomNeighbours);
+            gridPointsToExplode.AddRange(leftNeighbours);
+            gridPointsToExplode.AddRange(rightNeighbours);
         }
-        gemsToExplode = gemsToExplode.GroupBy(x => x.Position).Select(x => x.First()).ToList();
+        gridPointsToExplode = gridPointsToExplode.GroupBy(x => x.Position).Select(x => x.First()).ToList();
 
-
-        foreach (var gem in gemsToExplode) {
-            if (gem.Content != null)
+        foreach (var gridPoint in gridPointsToExplode) {
+            if (gridPoint.Content != null)
             {
-                Destroy(gem.Content);
-                grid.UpdateGridPoint(gem.Position, null);
+                Destroy(gridPoint.Content);
+                grid.UpdateGridPoint(gridPoint.Position);
             }
         }
+        PopulateEmptyGridSpots();
+        stopWatch.Stop();
 
+        TimeSpan ts = stopWatch.Elapsed;
+        UnityEngine.Debug.Log($"Time taken to explode neighbours: {ts.ToString()}");
+
+    }
+
+    private void PopulateEmptyGridSpots()
+    {
+        var rand = new System.Random();
+        while (grid.HasEmptyContent())
+        {
+            foreach (var gridPoint in grid.GridPoints)
+            {
+                if (gridPoint.Content == null)
+                {
+                    var topNeighbour = grid.GetTopNeighbour(gridPoint);
+                    if (topNeighbour != null && topNeighbour.Content != null)
+                    {
+                        grid.UpdateGridPoint(gridPoint.Position, topNeighbour.Content);
+                        topNeighbour.Content.GetComponent<MoveScript>().MoveToPosition(gridPoint.Position, newGemMoveSpeed);
+                        grid.UpdateGridPoint(topNeighbour.Position);
+                    }
+                    else if (topNeighbour == null)
+                    {
+                        var randomGem = gems[rand.Next(0, gems.Count)];
+                        var gem = Instantiate(randomGem);
+                        grid.UpdateGridPoint(gridPoint.Position, gem);
+                        gem.GetComponent<MoveScript>().MoveToPosition(gridPoint.Position, newGemMoveSpeed);
+                        gem.name = $"{randomGem.name}";
+                        //ExplodeAdjacentNeighbors();
+                    }
+                }
+            }
+        }
     }
 
 
     private List<GridPoint> GetValidExplodingNeighbours(GridPoint point, Func<GridPoint, GridPoint> getNextNeighbour)
     {
-        var gemsToExplode = new List<GridPoint>();
+        var explodingNeighbours = new List<GridPoint>();
 
         var validNeighbours = new List<GridPoint> { point };
         var adjacentNeighbour = getNextNeighbour(point);
@@ -97,8 +143,8 @@ public class GemGridManager : MonoBehaviour {
             adjacentNeighbour = getNextNeighbour(adjacentNeighbour);
         }
         if (validNeighbours.Count >= 3)
-            gemsToExplode.AddRange(validNeighbours);
+            explodingNeighbours.AddRange(validNeighbours);
 
-        return gemsToExplode;
+        return explodingNeighbours;
     }
 }

@@ -290,6 +290,7 @@ MonoBehaviour:
   startingPosition: {x: 0, y: 0, z: 0}
   numberOfRows: 8
   numberOfColumns: 8
+  newGemMoveSpeed: 5
 --- !u!4 &300445719
 Transform:
   m_ObjectHideFlags: 0
