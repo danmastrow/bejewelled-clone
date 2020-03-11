@@ -130,6 +130,7 @@ public class GemGridManager : MonoBehaviour {
                     var topNeighbour = grid.GetTopNeighbour(gridPoint);
                     if (topNeighbour != null && topNeighbour.Content != null)
                     {
+                        topNeighbour.Content.name = $"{gridPoint.Position}";
                         grid.UpdateGridPoint(gridPoint.Position, topNeighbour.Content);
                         topNeighbour.Content.GetComponent<MoveScript>().MoveToPosition(gridPoint.Position, newGemMoveSpeed);
                         grid.UpdateGridPoint(topNeighbour.Position);
@@ -140,7 +141,7 @@ public class GemGridManager : MonoBehaviour {
                         var gem = Instantiate(randomGem);
                         grid.UpdateGridPoint(gridPoint.Position, gem);
                         gem.GetComponent<MoveScript>().MoveToPosition(gridPoint.Position, newGemMoveSpeed);
-                        gem.name = $"{randomGem.name}";
+                        gem.name = $"{gridPoint.Position}";
                     }
                 }
             }
