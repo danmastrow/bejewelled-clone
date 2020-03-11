@@ -18,7 +18,7 @@ public class GemGrid {
         }
     }
 
-    public void UpdateGridPointWithoutExploding(Vector2 point, GameObject newContent) {
+    public void UpdateGridPoint(Vector2 point, GameObject newContent) {
         var existingPoint = GridPoints.Where(x => x.Position == point).FirstOrDefault();
         if (existingPoint != null)
         {
@@ -28,6 +28,31 @@ public class GemGrid {
         {
             Debug.LogWarning($"Could not find point on grid: {point.x}:{point.y}");
         }
+    }
+
+
+    public GridPoint GetTopNeighbour(GridPoint point)
+    {
+        var neighbour = GridPoints.Where(a => a.Position == new Vector2(point.Position.x, point.Position.y + 1)).FirstOrDefault();
+        return neighbour;
+    }
+
+    public GridPoint GetRightNeighbour(GridPoint point)
+    {
+        var neighbour = GridPoints.Where(a => a.Position == new Vector2(point.Position.x + 1, point.Position.y)).FirstOrDefault();
+        return neighbour;
+    }
+
+    public GridPoint GetLeftNeighbour(GridPoint point)
+    {
+        var neighbour = GridPoints.Where(a => a.Position == new Vector2(point.Position.x - 1, point.Position.y)).FirstOrDefault();
+        return neighbour;
+    }
+
+    public GridPoint GetBottomNeighour(GridPoint point)
+    {
+        var neighbour = GridPoints.Where(a => a.Position == new Vector2(point.Position.x, point.Position.y + -1)).FirstOrDefault();
+        return neighbour;
     }
 
     public List<GridPoint> GetAllAdjacent(GridPoint point)

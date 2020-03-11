@@ -11,7 +11,6 @@ public enum GemColor {
 }
 public class GemScript : MonoBehaviour {
 
-    [SerializeField]
-    private GemColor Color;
+    public GemColor Color;
 
 }
