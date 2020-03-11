@@ -17,7 +17,7 @@ public class GemGridManager : MonoBehaviour {
     [SerializeField]
     private int newGemMoveSpeed;
     [SerializeField]
-    private int explodingCheckRate;
+    private float explodingCheckRate;
     private GemGrid grid;
     private List<GameObject> gems;
     private IEnumerator explodeGridPointsCoroutine;
@@ -26,7 +26,6 @@ public class GemGridManager : MonoBehaviour {
     void Awake() {
         gems = new List<GameObject> { RedGem, GreenGem, YellowGem, PurpleGem, BlueGem };
         grid = new GemGrid(numberOfRows, numberOfColumns);
-
         RegenerateGrid();
     }
 
@@ -40,7 +39,7 @@ public class GemGridManager : MonoBehaviour {
             grid.UpdateGridPoint(point.Position, gem);
             startingPosition = new Vector3(point.Position.x, point.Position.y, startingPosition.z);
             gem.GetComponent<MoveScript>().MoveToPosition(startingPosition);
-            gem.name = $"{randomGem.name}";
+            gem.name = $"{point.Position}";
         }
 
         // TODO: REFACTOR: Average guess that this finds a good enough distance for the camera to see everything
@@ -60,57 +59,63 @@ public class GemGridManager : MonoBehaviour {
 
     public void RegenerateGrid()
     {
+        GridReady = false;
         DestroyGridContent();
         grid = new GemGrid(numberOfRows, numberOfColumns);
         explodeGridPointsCoroutine = ExplodeAdjacentNeighbors(explodingCheckRate);
         PopulateGridWithRandomGems(startingPosition, numberOfRows, numberOfColumns);
+        StopCoroutine(explodeGridPointsCoroutine);
         StartCoroutine(explodeGridPointsCoroutine);
     }
 
     public IEnumerator ExplodeAdjacentNeighbors(float waitTime)
     {
-        yield return new WaitForSeconds(waitTime);
-
-        Stopwatch stopWatch = new Stopwatch();
-        stopWatch.Start();
-
-        var gridPointsToExplode = new List<GridPoint>();
-
-        foreach (var point in grid.GridPoints)
+        while (!GridReady)
         {
-            var topNeighbours = GetValidExplodingNeighbours(point, grid.GetTopNeighbour);
-            var bottomNeighbours = GetValidExplodingNeighbours(point, grid.GetBottomNeighour);
-            var leftNeighbours = GetValidExplodingNeighbours(point, grid.GetLeftNeighbour);
-            var rightNeighbours = GetValidExplodingNeighbours(point, grid.GetRightNeighbour);
-            gridPointsToExplode.AddRange(topNeighbours);
-            gridPointsToExplode.AddRange(bottomNeighbours);
-            gridPointsToExplode.AddRange(leftNeighbours);
-            gridPointsToExplode.AddRange(rightNeighbours);
-        }
-        gridPointsToExplode = gridPointsToExplode.GroupBy(x => x.Position).Select(x => x.First()).ToList();
+            yield return new WaitForSeconds(waitTime);
 
-        foreach (var gridPoint in gridPointsToExplode) {
-            if (gridPoint.Content != null)
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            var gridPointsToExplode = new List<GridPoint>();
+
+            foreach (var point in grid.GridPoints)
             {
-                Destroy(gridPoint.Content);
-                grid.UpdateGridPoint(gridPoint.Position);
+                var topNeighbours = GetValidExplodingNeighbours(point, grid.GetTopNeighbour);
+                var bottomNeighbours = GetValidExplodingNeighbours(point, grid.GetBottomNeighour);
+                var leftNeighbours = GetValidExplodingNeighbours(point, grid.GetLeftNeighbour);
+                var rightNeighbours = GetValidExplodingNeighbours(point, grid.GetRightNeighbour);
+                gridPointsToExplode.AddRange(topNeighbours);
+                gridPointsToExplode.AddRange(bottomNeighbours);
+                gridPointsToExplode.AddRange(leftNeighbours);
+                gridPointsToExplode.AddRange(rightNeighbours);
             }
-        }
-        if(gridPointsToExplode.Count > 0)
-        {
-            GridReady = false;
-            PopulateEmptyGridSpots();
-        } else
-        {
-            GridReady = true;
-            UnityEngine.Debug.Log("Grid ready");
-            StopCoroutine(explodeGridPointsCoroutine);
-        }
-        stopWatch.Stop();
+            gridPointsToExplode = gridPointsToExplode.GroupBy(x => x.Position).Select(x => x.First()).ToList();
 
-        TimeSpan ts = stopWatch.Elapsed;
-        UnityEngine.Debug.Log($"Time taken to explode neighbours: {ts.ToString()}");
+            foreach (var gridPoint in gridPointsToExplode)
+            {
+                if (gridPoint.Content != null)
+                {
+                    Destroy(gridPoint.Content);
+                    grid.UpdateGridPoint(gridPoint.Position);
+                }
+            }
+            if (gridPointsToExplode.Count > 0)
+            {
+                GridReady = false;
+                PopulateEmptyGridSpots();
+            }
+            else
+            {
+                GridReady = true;
+                UnityEngine.Debug.Log("Grid ready");
+                StopCoroutine(explodeGridPointsCoroutine);
+            }
+            stopWatch.Stop();
 
+            TimeSpan ts = stopWatch.Elapsed;
+            UnityEngine.Debug.Log($"Time taken to explode neighbours: {ts.ToString()}");
+        }
     }
 
     private void PopulateEmptyGridSpots()
@@ -140,7 +145,6 @@ public class GemGridManager : MonoBehaviour {
                 }
             }
         }
-        UnityEngine.Debug.Log("Exited looping");
 
     }
 
