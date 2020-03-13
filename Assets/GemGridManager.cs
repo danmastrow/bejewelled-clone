@@ -45,7 +45,7 @@ public class GemGridManager : MonoBehaviour {
                 point.Content.name = $"{point.Position}";
             }
             GridReady = false;
-            explodeGridPointsCoroutine = ExplodeAdjacentNeighbors(1f);
+            explodeGridPointsCoroutine = ExplodeAdjacentNeighbors(explodingCheckRate);
             StopCoroutine(explodeGridPointsCoroutine);
             StartCoroutine(explodeGridPointsCoroutine);
             return true;

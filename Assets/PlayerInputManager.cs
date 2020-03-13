@@ -14,6 +14,15 @@ public class PlayerInputManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (selectedObject != null)
+            {
+                selectedObject.GetComponent<GemScript>().Unhover();
+                selectedObject = null;
+            }
+
+        }
         if (gemGridManager.GridReady)
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -35,6 +44,9 @@ public class PlayerInputManager : MonoBehaviour
                             {
                                 selectedObject.GetComponent<GemScript>().Unhover();
                                 selectedObject = null;
+                            } else
+                            {
+                                Debug.LogWarning("TODO: Handle Swap failed");
                             }
                         }
                     }

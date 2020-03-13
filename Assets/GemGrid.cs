@@ -53,15 +53,76 @@ public class GemGrid {
             Debug.LogWarning("Cannot swap as points do not exist in Grid");
         } else
         {
-            var newPos1 = new Vector2(point2.Position.x, point2.Position.y);
-            var newPos2 = new Vector2(point1.Position.x, point1.Position.y);
-            point1 = new GridPoint(newPos1, point1.Content);
-            point2 = new GridPoint(newPos2, point2.Content);
-            result = new List<GridPoint> { point1, point2 };
-            UpdateGridPoint(newPos1, point1.Content);
-            UpdateGridPoint(newPos2, point2.Content);
+            var validSwap = IsValidSwap(point1, point2);
+
+            if (validSwap)
+            {
+                var newPos1 = new Vector2(point2.Position.x, point2.Position.y);
+                var newPos2 = new Vector2(point1.Position.x, point1.Position.y);
+                point1 = new GridPoint(newPos1, point1.Content);
+                point2 = new GridPoint(newPos2, point2.Content);
+                result = new List<GridPoint> { point1, point2 };
+                UpdateGridPoint(newPos1, point1.Content);
+                UpdateGridPoint(newPos2, point2.Content);
+            }
         }
 
+        return result;
+    }
+
+    private bool IsValidSwap(GridPoint point1, GridPoint point2)
+    {
+        var result = false;
+        var point1Color = point1.Content.GetComponent<GemScript>().Color;
+
+        switch (point1Color)
+        {
+            case GemColor.Red:
+                var validRedNeighbours = new List<GridPoint>() {
+                    GetTopNeighbour(point1), 
+                    GetRightNeighbour(point1), 
+                    GetBottomRightNeighbour(point1), 
+                    GetBottomLeftNeighbour(point1),
+                    GetLeftNeighbour(point1) 
+                };
+                if (validRedNeighbours.Contains(point2))
+                    result = true;
+                break;
+            case GemColor.Green:
+                var validGreenNeighbours = new List<GridPoint>() { 
+                    GetRightNeighbour(point1), 
+                    GetBottomNeighour(point1),
+                    GetLeftNeighbour(point1) 
+                };
+                if (validGreenNeighbours.Contains(point2))
+                    result = true;
+                break;
+            case GemColor.Blue:
+                var validBlueNeighbours = GetAllNeighbours(point1);
+                if (validBlueNeighbours.Contains(point2))
+                    result = true;
+                break;
+            case GemColor.Purple:
+                var validPurpleNeighbours = new List<GridPoint>() { GetLeftNeighbour(point1), GetRightNeighbour(point1), GetTopNeighbour(point1) };
+                if (validPurpleNeighbours.Contains(point2))
+                    result = true;
+                break;
+            case GemColor.Yellow:
+                var validYellowNeighbours = new List<GridPoint>() {
+                    GetTopRightNeighbour(point1),
+                    GetRightNeighbour(point1),
+                    GetBottomRightNeighbour(point1),
+                    GetBottomLeftNeighbour(point1),
+                    GetLeftNeighbour(point1),
+                    GetTopLeftNeighbour(point1)
+                };
+                if (validYellowNeighbours.Contains(point2))
+                    result = true;
+                break;
+            default:
+                Debug.LogError($"{point1Color.ToString()} does not exist as a valid swap.");
+                break;
+        }
         return result;
     }
 
@@ -85,29 +146,49 @@ public class GemGrid {
 
     public GridPoint GetBottomNeighour(GridPoint point)
     {
-        var neighbour = GridPoints.Where(a => a.Position == new Vector2(point.Position.x, point.Position.y + -1)).FirstOrDefault();
+        var neighbour = GridPoints.Where(a => a.Position == new Vector2(point.Position.x, point.Position.y - 1)).FirstOrDefault();
         return neighbour;
     }
 
-    public List<GridPoint> GetVerticalNeighbours(GridPoint point)
+    public GridPoint GetTopLeftNeighbour(GridPoint point)
     {
-        var neighbours = new List<GridPoint>();
-        for (int y = Convert.ToInt32(point.Position.y); y < ColumnCount; y++) // Get all neighbours up
+        var neighbour = GridPoints.Where(a => a.Position == new Vector2(point.Position.x - 1 , point.Position.y + 1)).FirstOrDefault();
+        return neighbour;
+    }
+    public GridPoint GetTopRightNeighbour(GridPoint point)
+    {
+        var neighbour = GridPoints.Where(a => a.Position == new Vector2(point.Position.x + 1, point.Position.y + 1)).FirstOrDefault();
+        return neighbour;
+    }
+
+    public GridPoint GetBottomRightNeighbour(GridPoint point)
+    {
+        var neighbour = GridPoints.Where(a => a.Position == new Vector2(point.Position.x + 1, point.Position.y - 1)).FirstOrDefault();
+        return neighbour;
+    }
+
+    public GridPoint GetBottomLeftNeighbour(GridPoint point)
+    {
+        var neighbour = GridPoints.Where(a => a.Position == new Vector2(point.Position.x - 1, point.Position.y - 1)).FirstOrDefault();
+        return neighbour;
+    }
+
+
+    public List<GridPoint> GetAllNeighbours(GridPoint point)
+    {
+
+
+        return new List<GridPoint>()
         {
-            var neighbour = GridPoints.Where(z => z.Position == new Vector2(point.Position.x, Convert.ToSingle(y))).FirstOrDefault();
-            if (neighbour != null)
-                neighbours.Add(neighbour);
-        }
-
-        for (int y = Convert.ToInt32(point.Position.y); y >= 0; y--) // Get all neighbours down
-        {
-            var neighbour = GridPoints.Where(z => z.Position == new Vector2(point.Position.x, Convert.ToSingle(y))).FirstOrDefault();
-            if (neighbour != null)
-                neighbours.Add(neighbour);
-        }
-
-
-        return neighbours;
+            GetTopNeighbour(point),
+            GetTopRightNeighbour(point),
+            GetRightNeighbour(point),
+            GetBottomRightNeighbour(point),
+            GetBottomNeighour(point),
+            GetBottomLeftNeighbour(point),
+            GetLeftNeighbour(point),
+            GetTopLeftNeighbour(point)
+        };
     }
 
     public bool HasEmptyContent()
