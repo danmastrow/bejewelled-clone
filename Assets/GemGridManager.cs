@@ -78,7 +78,7 @@ public class GemGridManager : MonoBehaviour {
     {
         foreach (var point in grid.GridPoints)
             if (point.Content != null)
-                Destroy(point.Content);
+                point.Content.GetComponent<MoveScript>().ExpodeAndShrink();
     }
 
     public void RegenerateGrid()
@@ -120,7 +120,7 @@ public class GemGridManager : MonoBehaviour {
             {
                 if (gridPoint.Content != null)
                 {
-                    Destroy(gridPoint.Content);
+                    gridPoint.Content.GetComponent<MoveScript>().ExpodeAndShrink();
                     grid.UpdateGridPoint(gridPoint.Position);
                 }
             }

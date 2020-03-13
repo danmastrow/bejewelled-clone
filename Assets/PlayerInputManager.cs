@@ -34,6 +34,7 @@ public class PlayerInputManager : MonoBehaviour
                     {
                         if (selectedObject == null)
                         {
+                            // TODO: Check if inside the grid
                             selectedObject = hit.collider.gameObject;
                             selectedObject.GetComponent<GemScript>().Hover();
                         }
