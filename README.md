@@ -1,6 +1,6 @@
 # Bejewlled Clone
 Learning repo for making a bejewelled clone in Unity 3d
-
+![Screenshot](screenshot.png)
 
 ## Todo
 - [x] Grid generation 
