@@ -16,6 +16,7 @@ public class PlayerInputManager : MonoBehaviour
 
     void Update()
     {
+        var unhover = true;
         if (gemGridManager.GridReady)
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -33,18 +34,23 @@ public class PlayerInputManager : MonoBehaviour
                             var swapSucceeded = gemGridManager.TrySwap(selectedObject, hit.collider.gameObject);
                             if (swapSucceeded)
                             {
+                                hoveredObject.GetComponent<GemScript>().Unhover();
+                                selectedObject.GetComponent<GemScript>().Unhover();
                                 selectedObject = null;
                                 hoveredObject = null;
                             }
                         }
-
-                    } else
-                    {
-                        hoveredObject = hit.collider.gameObject;
-                        hoveredObject.GetComponent<GemScript>().Hover();
                     }
+                    if (hoveredObject != null && hoveredObject != hit.collider.gameObject)
+                    {
+                        hoveredObject.GetComponent<GemScript>().Unhover();
+                    }
+                    hoveredObject = hit.collider.gameObject;
+                    hoveredObject.GetComponent<GemScript>().Hover();
+                    unhover = false;
                 }
-            } else if (hoveredObject != null)
+            }
+            if (hoveredObject != null && unhover)
             {
                 hoveredObject.GetComponent<GemScript>().Unhover();
             }
