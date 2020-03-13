@@ -37,7 +37,7 @@ public class MoveScript : MonoBehaviour {
         {
             transform.localScale = new Vector3(transform.localScale.x - 0.03f, transform.localScale.y - 0.03f, transform.localScale.z - 0.03f);
             yield return new WaitForSeconds(.05f);
-            if (transform.localScale.x < 0)
+            if (transform.localScale.x <= 0 || transform.localScale.y <= 0 || transform.localScale.z <= 0)
             {
                 IsShrinking = false;
                 Destroy(gameObject);
