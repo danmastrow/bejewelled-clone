@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 5923028077635707051}
   - component: {fileID: 5915671285284464777}
   - component: {fileID: 5929640016447299855}
-  - component: {fileID: 5103798176421385887}
   - component: {fileID: 4959358478135657804}
+  - component: {fileID: 5103798176421385887}
   m_Layer: 0
   m_Name: RedGem
   m_TagString: Gem
@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5930985157637541881}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.1067257, y: 14.887279, z: 12.726141}
+  m_LocalPosition: {x: 17.0755, y: -0.27726817, z: -13.3303795}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5930985157637541881}
-  m_Mesh: {fileID: 4300000, guid: e4d834433e5484c9d905fcd6b6a273e6, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 12749e99d620c4aa0923fe97ba0de20c, type: 3}
 --- !u!23 &5915671285284464777
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -97,18 +97,6 @@ MonoBehaviour:
   Color: 0
   gemShader: {fileID: 4800000, guid: 4443140fbd110a7011005aba44295342, type: 3}
   outlineShader: {fileID: 4800000, guid: 240521d189373d144b998fc89cf9ced8, type: 3}
---- !u!114 &5103798176421385887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5930985157637541881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7bdd820ed897ec49a3624765161b318, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &4959358478135657804
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -122,4 +110,16 @@ MeshCollider:
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: e4d834433e5484c9d905fcd6b6a273e6, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 12749e99d620c4aa0923fe97ba0de20c, type: 3}
+--- !u!114 &5103798176421385887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5930985157637541881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7bdd820ed897ec49a3624765161b318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
