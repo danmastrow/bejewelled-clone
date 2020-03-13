@@ -23,6 +23,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 8900000, guid: 25793ebbbd111a7011005aba44295342, type: 2}
         m_Scale: {x: 1, y: 1}
@@ -36,13 +40,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Emission: 0.96
+    - _Emission: 1.9
     - _Emissive: 0
     - _EnvironmentLight: 2
     - _IndexOfRefraction: 2.14
-    - _ReflectionStrength: 0.7
+    - _Outline: 0.03
+    - _ReflectionStrength: 0.544
     m_Colors:
     - _Color: {r: 1, g: 0, b: 0, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1002 &2100001
 EditorExtensionImpl:
   serializedVersion: 6

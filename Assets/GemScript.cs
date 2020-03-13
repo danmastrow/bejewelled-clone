@@ -12,5 +12,20 @@ public enum GemColor {
 public class GemScript : MonoBehaviour {
 
     public GemColor Color;
+    public Shader gemShader;
+    public Shader outlineShader;
+    private Renderer rend;
 
+    private void Awake()
+    {
+        rend = GetComponent<Renderer>();
+    }
+    public void Hover()
+    {
+        rend.material.shader = outlineShader;
+    }
+    public void Unhover()
+    {
+        rend.material.shader = gemShader;
+    }
 }

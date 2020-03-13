@@ -133,8 +133,8 @@ GameObject:
   - component: {fileID: 300445718}
   - component: {fileID: 300445720}
   m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
+  m_Name: GameController
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -162,8 +162,9 @@ MonoBehaviour:
   startingPosition: {x: 0, y: 0, z: 0}
   numberOfRows: 8
   numberOfColumns: 8
-  newGemMoveSpeed: 5
-  explodingCheckRate: 1
+  explosionFactor: 3
+  newGemMoveSpeed: 2
+  explodingCheckRate: 0.5
 --- !u!4 &300445719
 Transform:
   m_ObjectHideFlags: 0

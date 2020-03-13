@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 3923501386541328027}
   - component: {fileID: 4281788924500180712}
   - component: {fileID: 5122820493761201696}
+  - component: {fileID: 8132773905565957346}
   m_Layer: 0
   m_Name: PurpleGem
-  m_TagString: Untagged
+  m_TagString: Gem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -94,6 +95,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Color: 3
+  gemShader: {fileID: 4800000, guid: 4443140fbd110a7011005aba44295342, type: 3}
+  outlineShader: {fileID: 4800000, guid: 240521d189373d144b998fc89cf9ced8, type: 3}
 --- !u!114 &5122820493761201696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,3 +109,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7bdd820ed897ec49a3624765161b318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!64 &8132773905565957346
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5122820493761201703}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: e4d834433e5484c9d905fcd6b6a273e6, type: 3}

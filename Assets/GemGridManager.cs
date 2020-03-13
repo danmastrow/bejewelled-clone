@@ -15,6 +15,8 @@ public class GemGridManager : MonoBehaviour {
     [SerializeField]
     private int numberOfColumns;
     [SerializeField]
+    private int explosionFactor;
+    [SerializeField]
     private int newGemMoveSpeed;
     [SerializeField]
     private float explodingCheckRate;
@@ -27,6 +29,28 @@ public class GemGridManager : MonoBehaviour {
         gems = new List<GameObject> { RedGem, GreenGem, YellowGem, PurpleGem, BlueGem };
         grid = new GemGrid(numberOfRows, numberOfColumns);
         RegenerateGrid();
+    }
+
+    public bool TrySwap(GameObject content1, GameObject content2)
+    {
+        if (content1 == content2 || content1 == null || content2 == null)
+            return false;
+
+        var swappedGridPoints = grid.TrySwap(content1, content2);
+        if(swappedGridPoints.Count > 0)
+        {
+            foreach(var point in swappedGridPoints)
+            {
+                point.Content.GetComponent<MoveScript>().MoveToPosition(point.Position, newGemMoveSpeed);
+                point.Content.name = $"{point.Position}";
+            }
+            GridReady = false;
+            explodeGridPointsCoroutine = ExplodeAdjacentNeighbors(1f);
+            StopCoroutine(explodeGridPointsCoroutine);
+            StartCoroutine(explodeGridPointsCoroutine);
+            return true;
+        }
+        return false;
     }
 
     private void PopulateGridWithRandomGems(Vector3 startingPosition, int numberOfRows, int numberOfColumns) {
@@ -165,7 +189,7 @@ public class GemGridManager : MonoBehaviour {
             validNeighbours.Add(adjacentNeighbour);
             adjacentNeighbour = getNextNeighbour(adjacentNeighbour);
         }
-        if (validNeighbours.Count >= 3)
+        if (validNeighbours.Count >= explosionFactor)
             explodingNeighbours.AddRange(validNeighbours);
 
         return explodingNeighbours;

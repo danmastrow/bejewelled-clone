@@ -42,6 +42,28 @@ public class GemGrid {
         }
     }
 
+    public List<GridPoint> TrySwap(GameObject content1, GameObject content2)
+    {
+        var result = new List<GridPoint>();
+        var point1 = GridPoints.Where(x => x.Content == content1).FirstOrDefault();
+        var point2 = GridPoints.Where(x => x.Content == content2).FirstOrDefault();
+
+        if(point1 == null || point2 == null)
+        {
+            Debug.LogWarning("Cannot swap as points do not exist in Grid");
+        } else
+        {
+            var newPos1 = new Vector2(point2.Position.x, point2.Position.y);
+            var newPos2 = new Vector2(point1.Position.x, point1.Position.y);
+            point1 = new GridPoint(newPos1, point1.Content);
+            point2 = new GridPoint(newPos2, point2.Content);
+            result = new List<GridPoint> { point1, point2 };
+            UpdateGridPoint(newPos1, point1.Content);
+            UpdateGridPoint(newPos2, point2.Content);
+        }
+
+        return result;
+    }
 
     public GridPoint GetTopNeighbour(GridPoint point)
     {
