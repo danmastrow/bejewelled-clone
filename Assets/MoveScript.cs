@@ -16,7 +16,7 @@ public class MoveScript : MonoBehaviour {
     public void ExpodeAndShrink()
     {
         var rb = gameObject.AddComponent<Rigidbody>();
-        rb.AddExplosionForce(5f, rb.gameObject.transform.position, 5f);
+        rb.AddExplosionForce(5f, rb.gameObject.transform.position, 5f, 5f);
         IsShrinking = true;
         StartCoroutine("Fade");
     }
@@ -40,6 +40,7 @@ public class MoveScript : MonoBehaviour {
             if (transform.localScale.x <= 0 || transform.localScale.y <= 0 || transform.localScale.z <= 0)
             {
                 IsShrinking = false;
+                StopAllCoroutines();
                 Destroy(gameObject);
             }
         }

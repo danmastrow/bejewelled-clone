@@ -14,6 +14,7 @@ public class PlayerInputManager : MonoBehaviour
 
     void Update()
     {
+        var gemWasClicked = false;
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (selectedObject != null)
@@ -21,8 +22,8 @@ public class PlayerInputManager : MonoBehaviour
                 selectedObject.GetComponent<GemScript>().Unhover();
                 selectedObject = null;
             }
-
         }
+
         if (gemGridManager.GridReady)
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -32,6 +33,7 @@ public class PlayerInputManager : MonoBehaviour
                 {
                     if (Input.GetMouseButtonDown(0))
                     {
+                        gemWasClicked = true;
                         if (selectedObject == null)
                         {
                             // TODO: Check if inside the grid
@@ -45,13 +47,23 @@ public class PlayerInputManager : MonoBehaviour
                             {
                                 selectedObject.GetComponent<GemScript>().Unhover();
                                 selectedObject = null;
-                            } else
+                            }
+                            else
                             {
                                 Debug.LogWarning("TODO: Handle Swap failed");
                             }
                         }
                     }
                 }
+
+            }
+        }
+        if (!gemWasClicked && Input.GetMouseButtonDown(0))
+        {
+            if (selectedObject != null)
+            {
+                selectedObject.GetComponent<GemScript>().Unhover();
+                selectedObject = null;
             }
         }
     }

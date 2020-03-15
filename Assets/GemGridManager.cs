@@ -97,10 +97,6 @@ public class GemGridManager : MonoBehaviour {
         while (!GridReady)
         {
             yield return new WaitForSeconds(waitTime);
-
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
             var gridPointsToExplode = new List<GridPoint>();
 
             foreach (var point in grid.GridPoints)
@@ -135,10 +131,6 @@ public class GemGridManager : MonoBehaviour {
                 UnityEngine.Debug.Log("Grid ready");
                 StopCoroutine(explodeGridPointsCoroutine);
             }
-            stopWatch.Stop();
-
-            TimeSpan ts = stopWatch.Elapsed;
-            UnityEngine.Debug.Log($"Time taken to explode neighbours: {ts.ToString()}");
         }
     }
 
@@ -172,7 +164,6 @@ public class GemGridManager : MonoBehaviour {
         }
 
     }
-
 
     private List<GridPoint> GetValidExplodingNeighbours(GridPoint point, Func<GridPoint, GridPoint> getNextNeighbour)
     {
