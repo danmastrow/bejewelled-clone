@@ -7,9 +7,9 @@ using UnityEngine;
 
 public class GemGridManager : MonoBehaviour {
     public GameObject RedGem, BlueGem, GreenGem, PurpleGem, YellowGem;
+    public bool GridReady, InitialGridGenerationFinished;
+    public Action<int> RedKillCountUpdated, BlueKillCountUpdated, GreenKillCountUpdated, PurpleKillCountUpdated, YellowKillCountUpdated;
 
-    [SerializeField]
-    private Vector3 startingPosition;
     [SerializeField]
     private int numberOfRows;
     [SerializeField]
@@ -23,8 +23,9 @@ public class GemGridManager : MonoBehaviour {
     private GemGrid grid;
     private List<GameObject> gems;
     private IEnumerator explodeGridPointsCoroutine;
+    [SerializeField]
+    private int blueKillCount, redKillCount, yellowKillCount, purpleKillCount, greenKillCount;
 
-    public bool GridReady { get; private set; }
     void Awake() {
         gems = new List<GameObject> { RedGem, GreenGem, YellowGem, PurpleGem, BlueGem };
         grid = new GemGrid(numberOfRows, numberOfColumns);
@@ -53,7 +54,7 @@ public class GemGridManager : MonoBehaviour {
         return false;
     }
 
-    private void PopulateGridWithRandomGems(Vector3 startingPosition, int numberOfRows, int numberOfColumns) {
+    private void PopulateGridWithRandomGems(int numberOfRows, int numberOfColumns) {
         Stopwatch stopWatch = new Stopwatch();
         stopWatch.Start();
         var rand = new System.Random();
@@ -61,8 +62,7 @@ public class GemGridManager : MonoBehaviour {
             var randomGem = gems[rand.Next(0, gems.Count)];
             var gem = Instantiate(randomGem);
             grid.UpdateGridPoint(point.Position, gem);
-            startingPosition = new Vector3(point.Position.x, point.Position.y, startingPosition.z);
-            gem.GetComponent<MoveScript>().MoveToPosition(startingPosition);
+            gem.GetComponent<MoveScript>().MoveToPosition(point.Position);
             gem.name = $"{point.Position}";
         }
 
@@ -83,11 +83,12 @@ public class GemGridManager : MonoBehaviour {
 
     public void RegenerateGrid()
     {
+        InitialGridGenerationFinished = false;
         GridReady = false;
         DestroyGridContent();
         grid = new GemGrid(numberOfRows, numberOfColumns);
         explodeGridPointsCoroutine = ExplodeAdjacentNeighbors(explodingCheckRate);
-        PopulateGridWithRandomGems(startingPosition, numberOfRows, numberOfColumns);
+        PopulateGridWithRandomGems(numberOfRows, numberOfColumns);
         StopCoroutine(explodeGridPointsCoroutine);
         StartCoroutine(explodeGridPointsCoroutine);
     }
@@ -116,8 +117,37 @@ public class GemGridManager : MonoBehaviour {
             {
                 if (gridPoint.Content != null)
                 {
+                    var color = gridPoint.Content.GetComponent<GemScript>().Color;
                     gridPoint.Content.GetComponent<MoveScript>().ExpodeAndShrink();
                     grid.UpdateGridPoint(gridPoint.Position);
+                    if (InitialGridGenerationFinished)
+                    {
+                        switch (color)
+                        {
+                            case GemColor.Red:
+                                redKillCount++;
+                                RedKillCountUpdated(redKillCount);
+                                break;
+                            case GemColor.Green:
+                                greenKillCount++;
+                                GreenKillCountUpdated(greenKillCount);
+                                break;
+                            case GemColor.Blue:
+                                blueKillCount++;
+                                BlueKillCountUpdated(blueKillCount);
+                                break;
+                            case GemColor.Purple:
+                                purpleKillCount++;
+                                PurpleKillCountUpdated(purpleKillCount);
+                                break;
+                            case GemColor.Yellow:
+                                yellowKillCount++;
+                                YellowKillCountUpdated(yellowKillCount);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 }
             }
             if (gridPointsToExplode.Count > 0)
@@ -127,6 +157,7 @@ public class GemGridManager : MonoBehaviour {
             }
             else
             {
+                InitialGridGenerationFinished = true;
                 GridReady = true;
                 UnityEngine.Debug.Log("Grid ready");
                 StopCoroutine(explodeGridPointsCoroutine);

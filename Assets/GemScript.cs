@@ -13,7 +13,7 @@ public class GemScript : MonoBehaviour {
 
     public GemColor Color;
     public Shader gemShader;
-    public Shader outlineShader;
+    public GameObject background;
     private Renderer rend;
 
     private void Awake()
@@ -22,10 +22,16 @@ public class GemScript : MonoBehaviour {
     }
     public void Hover()
     {
-        rend.material.shader = outlineShader;
+        if(background != null)
+        {
+            background.SetActive(true);
+        }
     }
     public void Unhover()
     {
-        rend.material.shader = gemShader;
+        if (background != null)
+        {
+            background.SetActive(false);
+        }
     }
 }

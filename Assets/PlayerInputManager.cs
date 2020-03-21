@@ -15,7 +15,7 @@ public class PlayerInputManager : MonoBehaviour
     void Update()
     {
         var gemWasClicked = false;
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButton(1))
         {
             if (selectedObject != null)
             {
@@ -57,8 +57,7 @@ public class PlayerInputManager : MonoBehaviour
                 }
 
             }
-        }
-        if (!gemWasClicked && Input.GetMouseButtonDown(0))
+        } else if (!gemWasClicked && Input.GetMouseButtonDown(0))
         {
             if (selectedObject != null)
             {
