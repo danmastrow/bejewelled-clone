@@ -53,7 +53,7 @@ public class PlayerInputManager : MonoBehaviour
                                 Debug.LogWarning("TODO: Handle Swap failed");
                             }
                         }
-                    }
+                    } 
                 }
 
             }

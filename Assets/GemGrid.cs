@@ -79,20 +79,20 @@ public class GemGrid {
         {
             case GemColor.Red:
                 var validRedNeighbours = new List<GridPoint>() {
-                    GetTopNeighbour(point1), 
-                    GetRightNeighbour(point1), 
-                    GetBottomRightNeighbour(point1), 
+                    GetTopNeighbour(point1),
+                    GetRightNeighbour(point1),
+                    GetBottomRightNeighbour(point1),
                     GetBottomLeftNeighbour(point1),
-                    GetLeftNeighbour(point1) 
+                    GetLeftNeighbour(point1)
                 };
                 if (validRedNeighbours.Contains(point2))
                     result = true;
                 break;
             case GemColor.Green:
-                var validGreenNeighbours = new List<GridPoint>() { 
-                    GetRightNeighbour(point1), 
+                var validGreenNeighbours = new List<GridPoint>() {
+                    GetRightNeighbour(point1),
                     GetBottomNeighour(point1),
-                    GetLeftNeighbour(point1) 
+                    GetLeftNeighbour(point1)
                 };
                 if (validGreenNeighbours.Contains(point2))
                     result = true;
@@ -117,6 +117,13 @@ public class GemGrid {
                     GetTopLeftNeighbour(point1)
                 };
                 if (validYellowNeighbours.Contains(point2))
+                    result = true;
+                break;
+            case GemColor.Crystal:
+                var validCrystalNeighbours = new List<GridPoint>() {
+                    GetTopNeighbour(point1)
+                };
+                if (validCrystalNeighbours.Contains(point2))
                     result = true;
                 break;
             default:

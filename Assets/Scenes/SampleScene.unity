@@ -236,10 +236,12 @@ MonoBehaviour:
     type: 3}
   YellowGem: {fileID: 868332755372270614, guid: 57ecc3fa050729c4a8ad9a0d6ca73ed8,
     type: 3}
+  CrystalGem: {fileID: 7495811297485388003, guid: 7a04b00b3d3680049a0850e821d71158,
+    type: 3}
   GridReady: 0
   InitialGridGenerationFinished: 0
-  numberOfRows: 5
-  numberOfColumns: 5
+  numberOfRows: 6
+  numberOfColumns: 6
   explosionFactor: 3
   newGemMoveSpeed: 3
   explodingCheckRate: 0.25
@@ -248,6 +250,7 @@ MonoBehaviour:
   yellowKillCount: 0
   purpleKillCount: 0
   greenKillCount: 0
+  crystalKillCount: 0
 --- !u!4 &300445719
 Transform:
   m_ObjectHideFlags: 0
@@ -274,6 +277,83 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3163e77eba06d934c967af1a6bcf0588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &350283050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 350283051}
+  - component: {fileID: 350283053}
+  - component: {fileID: 350283052}
+  m_Layer: 5
+  m_Name: Crystal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &350283051
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350283050}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1735049836}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 200, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &350283052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350283050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.36205056, g: 0.6060187, b: 0.6792453, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 24
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 0
+--- !u!222 &350283053
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350283050}
+  m_CullTransparentMesh: 0
 --- !u!1 &361983100
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,6 +848,7 @@ MonoBehaviour:
   greenKillCountText: {fileID: 1926186230}
   purpleKillCountText: {fileID: 1308823218}
   yellowKillCountText: {fileID: 539055436}
+  crystalKillCountText: {fileID: 350283052}
 --- !u!1 &1308823216
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,6 +1191,7 @@ RectTransform:
   - {fileID: 539055435}
   - {fileID: 1926186229}
   - {fileID: 1308823217}
+  - {fileID: 350283051}
   - {fileID: 2074979879}
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -1226,7 +1308,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1735049836}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}

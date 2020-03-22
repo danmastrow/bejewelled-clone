@@ -6,9 +6,9 @@ using System.Linq;
 using UnityEngine;
 
 public class GemGridManager : MonoBehaviour {
-    public GameObject RedGem, BlueGem, GreenGem, PurpleGem, YellowGem;
+    public GameObject RedGem, BlueGem, GreenGem, PurpleGem, YellowGem, CrystalGem;
     public bool GridReady, InitialGridGenerationFinished;
-    public Action<int> RedKillCountUpdated, BlueKillCountUpdated, GreenKillCountUpdated, PurpleKillCountUpdated, YellowKillCountUpdated;
+    public Action<int> RedKillCountUpdated, BlueKillCountUpdated, GreenKillCountUpdated, PurpleKillCountUpdated, YellowKillCountUpdated, CrystalCountUpdated;
 
     [SerializeField]
     private int numberOfRows;
@@ -24,10 +24,10 @@ public class GemGridManager : MonoBehaviour {
     private List<GameObject> gems;
     private IEnumerator explodeGridPointsCoroutine;
     [SerializeField]
-    private int blueKillCount, redKillCount, yellowKillCount, purpleKillCount, greenKillCount;
+    private int blueKillCount, redKillCount, yellowKillCount, purpleKillCount, greenKillCount, crystalKillCount;
 
     void Awake() {
-        gems = new List<GameObject> { RedGem, GreenGem, YellowGem, PurpleGem, BlueGem };
+        gems = new List<GameObject> { RedGem, GreenGem, YellowGem, PurpleGem, BlueGem, CrystalGem };
         grid = new GemGrid(numberOfRows, numberOfColumns);
         RegenerateGrid();
     }
@@ -143,6 +143,10 @@ public class GemGridManager : MonoBehaviour {
                             case GemColor.Yellow:
                                 yellowKillCount++;
                                 YellowKillCountUpdated(yellowKillCount);
+                                break;
+                            case GemColor.Crystal:
+                                crystalKillCount++;
+                                CrystalCountUpdated(crystalKillCount);
                                 break;
                             default:
                                 break;

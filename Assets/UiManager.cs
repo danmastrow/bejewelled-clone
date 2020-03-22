@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UiManager : MonoBehaviour
 {
     public GemGridManager gemGridManager;
-    public Text redKillCountText, blueKillCountText, greenKillCountText, purpleKillCountText, yellowKillCountText;
+    public Text redKillCountText, blueKillCountText, greenKillCountText, purpleKillCountText, yellowKillCountText, crystalKillCountText;
 
     private void Awake()
     {
@@ -15,9 +15,13 @@ public class UiManager : MonoBehaviour
         gemGridManager.GreenKillCountUpdated += GreenKillCountUpdated;
         gemGridManager.PurpleKillCountUpdated += PurpleKillCountUpdated;
         gemGridManager.YellowKillCountUpdated += YellowKillCountUpdated;
+        gemGridManager.CrystalCountUpdated += CrystalKillCountUpdated;
     }
 
-
+    private void CrystalKillCountUpdated(int newCount)
+    {
+        crystalKillCountText.text = $"{newCount}";
+    }
     private void RedKillCountUpdated(int newCount)
     {
         redKillCountText.text = $"{newCount}";
@@ -52,5 +56,7 @@ public class UiManager : MonoBehaviour
         gemGridManager.GreenKillCountUpdated -= GreenKillCountUpdated;
         gemGridManager.PurpleKillCountUpdated -= PurpleKillCountUpdated;
         gemGridManager.YellowKillCountUpdated -= YellowKillCountUpdated;
+        gemGridManager.CrystalCountUpdated -= CrystalKillCountUpdated;
+
     }
 }

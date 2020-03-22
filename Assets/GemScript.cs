@@ -7,7 +7,8 @@ public enum GemColor {
     Green,
     Blue,
     Purple,
-    Yellow
+    Yellow,
+    Crystal
 }
 public class GemScript : MonoBehaviour {
 
