@@ -2,6 +2,9 @@
 Learning repo for making a bejewelled clone in Unity 3d
 ![Screenshot](screenshot.png)
 
+# Rules
+Gems can only move in the direction that they have points
+
 ## Todo
 - [x] Grid generation 
 - [x] Gem and camera movement
