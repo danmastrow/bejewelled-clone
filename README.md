@@ -1,4 +1,4 @@
-# Bejewlled Clone
+# Bejewlled Clone + VR Support
 Learning repo for making a bejewelled clone in Unity 3d
 ![Screenshot](screenshot.png)
 
