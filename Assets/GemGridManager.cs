@@ -32,6 +32,12 @@ public class GemGridManager : MonoBehaviour {
         RegenerateGrid();
     }
 
+    public void SetGridSize(int size)
+    {
+        numberOfRows = size;
+        numberOfColumns = size;
+    }
+
     public bool TrySwap(GameObject content1, GameObject content2)
     {
         if (content1 == content2 || content1 == null || content2 == null)
