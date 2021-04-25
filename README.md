@@ -1,9 +1,12 @@
 # Bejewlled Clone
 
 Learning repo for making a bejewelled clone in Unity 3d
+
+## [Read about this repo here](!https://mastrowi.cz/not-bejeweled-clone)
+
 ![Screenshot](screenshot.png)
 
-# Rules
+## Rules
 
 Three or more gems in a row vertically or horizontally will explode!
 
