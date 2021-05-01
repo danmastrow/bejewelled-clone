@@ -1,8 +1,8 @@
-# Bejewlled Clone
+# Bejewelled Clone (not really dont sue me)
 
-Learning repo for making a bejewelled clone in Unity 3d
+Learning repo for making a Bejewelled clone in Unity 3d
 
-## [Read about this repo here](!https://mastrowi.cz/not-bejeweled-clone)
+## [Read about this repo here](https://mastrowi.cz/not-bejeweled-clone)
 
 ![Screenshot](screenshot.png)
 
